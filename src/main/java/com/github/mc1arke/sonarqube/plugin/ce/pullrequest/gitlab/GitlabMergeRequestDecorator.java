@@ -168,12 +168,9 @@ public class GitlabMergeRequestDecorator extends DiscussionAwarePullRequestDecor
     protected void submitSummaryNote(GitlabClient client, MergeRequest mergeRequest, AnalysisDetails analysis) {
         try {
             String summaryCommentBody = analysis.createAnalysisSummary(formatterFactory);
-            Discussion summaryComment = client.addMergeRequestDiscussion(mergeRequest.getSourceProjectId(),
+            client.addMergeRequestNote(mergeRequest.getSourceProjectId(),
                     mergeRequest.getIid(),
                     new MergeRequestNote(summaryCommentBody));
-            if (analysis.getQualityGateStatus() == QualityGate.Status.OK) {
-                client.resolveMergeRequestDiscussion(mergeRequest.getSourceProjectId(), mergeRequest.getIid(), summaryComment.getId());
-            }
         } catch (IOException ex) {
             throw new IllegalStateException("Could not submit summary comment to Gitlab", ex);
         }

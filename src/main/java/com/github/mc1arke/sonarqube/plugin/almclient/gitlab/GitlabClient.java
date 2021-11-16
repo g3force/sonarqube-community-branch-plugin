@@ -22,9 +22,11 @@ import com.github.mc1arke.sonarqube.plugin.almclient.gitlab.model.Commit;
 import com.github.mc1arke.sonarqube.plugin.almclient.gitlab.model.Discussion;
 import com.github.mc1arke.sonarqube.plugin.almclient.gitlab.model.MergeRequest;
 import com.github.mc1arke.sonarqube.plugin.almclient.gitlab.model.MergeRequestNote;
+import com.github.mc1arke.sonarqube.plugin.almclient.gitlab.model.Note;
 import com.github.mc1arke.sonarqube.plugin.almclient.gitlab.model.PipelineStatus;
 import com.github.mc1arke.sonarqube.plugin.almclient.gitlab.model.Project;
 import com.github.mc1arke.sonarqube.plugin.almclient.gitlab.model.User;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.io.IOException;
 import java.util.List;
@@ -40,6 +42,8 @@ public interface GitlabClient {
     List<Discussion> getMergeRequestDiscussions(long projectId, long mergeRequestIid) throws IOException;
 
     Discussion addMergeRequestDiscussion(long projectId, long mergeRequestIid, MergeRequestNote commitNote) throws IOException;
+    
+    Note addMergeRequestNote(long projectId, long mergeRequestIid, MergeRequestNote mergeRequestNote) throws IOException;
 
     void addMergeRequestDiscussionNote(long projectId, long mergeRequestIid, String discussionId, String noteContent) throws IOException;
 

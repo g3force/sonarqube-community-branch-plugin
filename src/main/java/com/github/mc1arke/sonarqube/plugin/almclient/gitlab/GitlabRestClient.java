@@ -25,6 +25,7 @@ import com.github.mc1arke.sonarqube.plugin.almclient.gitlab.model.CommitNote;
 import com.github.mc1arke.sonarqube.plugin.almclient.gitlab.model.Discussion;
 import com.github.mc1arke.sonarqube.plugin.almclient.gitlab.model.MergeRequest;
 import com.github.mc1arke.sonarqube.plugin.almclient.gitlab.model.MergeRequestNote;
+import com.github.mc1arke.sonarqube.plugin.almclient.gitlab.model.Note;
 import com.github.mc1arke.sonarqube.plugin.almclient.gitlab.model.PipelineStatus;
 import com.github.mc1arke.sonarqube.plugin.almclient.gitlab.model.Project;
 import com.github.mc1arke.sonarqube.plugin.almclient.gitlab.model.User;
@@ -115,6 +116,19 @@ class GitlabRestClient implements GitlabClient {
         httpPost.addHeader("Content-type", ContentType.APPLICATION_FORM_URLENCODED.getMimeType());
         httpPost.setEntity(new UrlEncodedFormEntity(requestContent, StandardCharsets.UTF_8));
         return entity(httpPost, Discussion.class, httpResponse -> validateResponse(httpResponse, 201, "Discussion successfully created"));
+    }
+
+    @Override
+    public Note addMergeRequestNote(long projectId, long mergeRequestIid, MergeRequestNote mergeRequestNote) throws IOException {
+        String targetUrl = String.format("%s/projects/%s/merge_requests/%s/notes", baseGitlabApiUrl, projectId, mergeRequestIid);
+
+        List<NameValuePair> requestContent = new ArrayList<>();
+        requestContent.add(new BasicNameValuePair("body", mergeRequestNote.getContent()));
+
+        HttpPost httpPost = new HttpPost(targetUrl);
+        httpPost.addHeader("Content-type", ContentType.APPLICATION_FORM_URLENCODED.getMimeType());
+        httpPost.setEntity(new UrlEncodedFormEntity(requestContent, StandardCharsets.UTF_8));
+        return entity(httpPost, Note.class, httpResponse -> validateResponse(httpResponse, 201, "Note successfully created"));
     }
 
     @Override
